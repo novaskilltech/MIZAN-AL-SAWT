@@ -1,0 +1,16 @@
+{
+  "name": "Mīzān al-Ṣawt — ميزان الصوت",
+  "short_name": "Mīzān al-Ṣawt",
+  "description": "Miroir vocal & entraînement à la justesse pour la récitation du Coran",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070D1E",
+  "theme_color": "#0B132B",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

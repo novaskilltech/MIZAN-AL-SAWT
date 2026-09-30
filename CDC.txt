@@ -1,0 +1,1541 @@
+Voici un **cahier des charges V1 exploitable directement par un développeur ou un agent de codage**. J’ai volontairement conçu le produit comme un outil personnel, local-first et très simple à maintenir.
+
+# CAHIER DES CHARGES  
+## ميزان الصوت — Mīzān al-Ṣawt
+
+**Type de produit :** application web personnelle d’entraînement vocal pour la récitation du Coran  
+**Utilisateur :** un seul utilisateur  
+**Authentification :** aucune  
+**Priorité :** simplicité, efficacité, analyse vocale en temps réel, respect du tajwīd et protection de la voix  
+**Plateforme cible :** ordinateur + smartphone, installation possible comme PWA
+
+---
+
+# 1. VISION DU PROJET
+
+Mīzān al-Ṣawt est une application d’entraînement vocal destinée à améliorer le contrôle de la voix dans la récitation du Coran.
+
+L’objectif n’est pas d’apprendre à chanter ni de transformer la récitation en exercice musical.
+
+L’application doit développer principalement :
+
+- la maîtrise du souffle ;
+- la stabilité vocale ;
+- la capacité à monter et descendre volontairement dans la voix ;
+- la reconnaissance des hauteurs ;
+- la reproduction d’une hauteur entendue ;
+- la reproduction de petites séquences mélodiques ;
+- la mémoire mélodique ;
+- la souplesse entre grave, médium et aigu ;
+- l’imitation d’une courbe vocale ;
+- la capacité à reproduire une mélodie imaginée mentalement ;
+- l’application de ces compétences à la récitation sans altérer le tajwīd.
+
+Principe fondamental :
+
+> La technique vocale sert la récitation.  
+> La récitation ne doit jamais être déformée pour servir une mélodie.
+
+---
+
+# 2. PROBLÈME À RÉSOUDRE
+
+L’utilisateur possède une perception mélodique intérieure : il peut imaginer des variations et des mélodies qu’il souhaiterait utiliser dans sa récitation.
+
+Cependant, il rencontre plusieurs difficultés :
+
+- difficulté à reproduire vocalement ce qu’il imagine ;
+- difficulté à contrôler précisément la montée et la descente de la voix ;
+- manque de précision dans les hauteurs ;
+- fatigue vocale relativement rapide ;
+- difficulté à maintenir une récitation expressive sans forcer ;
+- absence de méthode progressive d’entraînement.
+
+Le problème principal peut être résumé ainsi :
+
+> Il existe un décalage entre ce que l’oreille intérieure imagine et ce que la voix parvient réellement à produire.
+
+L’application doit progressivement réduire cet écart.
+
+---
+
+# 3. OBJECTIF PRINCIPAL
+
+Permettre à l’utilisateur de passer progressivement de :
+
+**j’entends une mélodie**
+
+à :
+
+**je sais la reproduire avec ma voix**
+
+puis :
+
+**je sais l’utiliser naturellement dans ma récitation.**
+
+Le cycle pédagogique principal sera donc :
+
+**Écouter → comprendre → reproduire → visualiser → corriger → mémoriser → appliquer.**
+
+---
+
+# 4. PÉRIMÈTRE DU PRODUIT
+
+L’application est strictement personnelle.
+
+Il n’est donc pas nécessaire de développer :
+
+- création de compte ;
+- connexion ;
+- mot de passe ;
+- OAuth ;
+- gestion d’utilisateurs ;
+- abonnements ;
+- paiement ;
+- profils publics ;
+- système communautaire ;
+- classement ;
+- réseau social ;
+- administration utilisateurs ;
+- serveur complexe.
+
+Toutes les informations peuvent être enregistrées localement.
+
+---
+
+# 5. PHILOSOPHIE LOCAL-FIRST
+
+Les données de progression doivent être stockées directement dans le navigateur.
+
+Technologies possibles :
+
+- IndexedDB pour les données principales ;
+- localStorage uniquement pour les réglages simples ;
+- fichiers audio locaux pour certains exercices.
+
+L’application doit fonctionner sans compte.
+
+Une fonction doit permettre :
+
+**Exporter mes données**
+
+→ fichier JSON.
+
+Et :
+
+**Importer une sauvegarde**
+
+→ restauration de l’historique.
+
+Ainsi, changer d’ordinateur ou de navigateur ne fait pas perdre la progression.
+
+---
+
+# 6. APPLICATION INSTALLABLE
+
+L’application doit pouvoir être utilisée comme :
+
+- site web ;
+- application installée sur ordinateur ;
+- application installée sur smartphone.
+
+Une PWA est recommandée.
+
+L’utilisateur pourra ainsi l’ajouter à l’écran d’accueil de son téléphone.
+
+---
+
+# 7. LANGUE DE L’INTERFACE
+
+Langue principale :
+
+**français**
+
+L’arabe doit être correctement supporté pour :
+
+- versets ;
+- expressions ;
+- titres religieux ;
+- éventuellement quelques éléments d’interface.
+
+Direction RTL lorsque nécessaire.
+
+---
+
+# 8. ÉCRAN D’ACCUEIL
+
+L’accueil doit rester extrêmement simple.
+
+Exemple :
+
+**Mīzān al-Ṣawt**
+
+Bonjour.
+
+### Entraînement du jour
+12 minutes
+
+Bouton principal :
+
+**COMMENCER**
+
+Puis quatre accès rapides :
+
+- Échauffement
+- Exercices vocaux
+- Mélodie
+- Récitation
+
+En dessous :
+
+### Aujourd’hui
+
+Précision : 78 %
+
+Stabilité : 84 %
+
+Amplitude confortable : +5 %
+
+Temps d’entraînement : 11 min
+
+---
+
+# 9. PREMIER LANCEMENT
+
+Lors de la première utilisation seulement, l’application lance un diagnostic vocal.
+
+Durée cible :
+
+**5 à 8 minutes maximum.**
+
+Le diagnostic doit déterminer approximativement :
+
+- hauteur vocale confortable ;
+- zone grave confortable ;
+- zone aiguë confortable ;
+- amplitude vocale utilisable sans effort ;
+- stabilité ;
+- durée de phonation confortable ;
+- facilité de montée ;
+- facilité de descente ;
+- précision dans la reproduction d’un son.
+
+Il ne s’agit pas de déterminer les limites maximales de la voix.
+
+L’application doit rechercher :
+
+**la zone confortable de travail.**
+
+---
+
+# 10. CALIBRATION DU MICROPHONE
+
+Avant les exercices :
+
+### Test microphone
+
+L’utilisateur prononce :
+
+**« Aaaaa »**
+
+pendant environ 3 secondes.
+
+L’application vérifie :
+
+- détection correcte du microphone ;
+- niveau sonore ;
+- bruit de fond ;
+- fréquence détectable ;
+- saturation éventuelle.
+
+Message possible :
+
+> Microphone correctement configuré.
+
+Ou :
+
+> Ton niveau sonore est trop élevé. Éloigne légèrement le microphone.
+
+---
+
+# 11. MOTEUR CENTRAL : DÉTECTION DE HAUTEUR
+
+L’application doit analyser la voix en temps réel.
+
+Le moteur doit détecter principalement :
+
+- fréquence fondamentale ;
+- variation de fréquence ;
+- durée ;
+- stabilité ;
+- intensité approximative.
+
+Exemple :
+
+Voix détectée :
+
+**138 Hz**
+
+Puis :
+
+**145 Hz**
+
+Puis :
+
+**152 Hz**
+
+La courbe doit apparaître immédiatement à l’écran.
+
+---
+
+# 12. NE PAS BASER L’INTERFACE SUR LES NOTES MUSICALES
+
+Les noms :
+
+Do, Ré, Mi, Fa, Sol...
+
+ne doivent pas apparaître par défaut.
+
+L’utilisateur doit travailler avec des concepts intuitifs :
+
+- plus grave ;
+- plus aigu ;
+- monte ;
+- descend ;
+- stable ;
+- recommence ;
+- très proche ;
+- juste.
+
+Les fréquences et intervalles peuvent être utilisés techniquement en arrière-plan.
+
+---
+
+# 13. VISUALISATION PRINCIPALE
+
+La visualisation centrale doit fonctionner comme une route vocale.
+
+Exemple :
+
+```text
+AIGU
+
+        ╭──────╮
+       ╱        ╲
+──────╯          ╰───────
+
+GRAVE
+```
+
+La ligne représente la cible.
+
+La voix de l’utilisateur apparaît en temps réel sous forme d’une seconde courbe.
+
+Objectif :
+
+faire suivre la courbe de la voix à la courbe cible.
+
+---
+
+# 14. FEEDBACK EN TEMPS RÉEL
+
+L’application doit pouvoir afficher :
+
+**✓ Juste**
+
+**↑ Un peu plus haut**
+
+**↓ Un peu plus bas**
+
+**→ Stabilise**
+
+**↗ Monte progressivement**
+
+**↘ Descends progressivement**
+
+Le feedback doit rester discret.
+
+Il ne doit pas perturber la concentration.
+
+---
+
+# 15. SCORE
+
+Chaque exercice reçoit plusieurs sous-scores.
+
+Exemple :
+
+### Résultat
+
+Précision : 82 %
+
+Stabilité : 91 %
+
+Transitions : 74 %
+
+Régularité : 86 %
+
+Score global : 83 %
+
+Mais le score ne doit pas devenir un jeu compétitif.
+
+Le but est uniquement de visualiser la progression personnelle.
+
+---
+
+# 16. MODULE 1 — ÉCHAUFFEMENT
+
+Durée cible :
+
+**3 à 5 minutes.**
+
+Exercices possibles :
+
+- respiration douce ;
+- expiration contrôlée ;
+- vibration des lèvres ;
+- sons légers ;
+- glissement grave → médium ;
+- glissement médium → aigu confortable ;
+- retour vers le médium ;
+- maintien d’une hauteur confortable.
+
+L'application ne doit jamais demander d'atteindre un extrême vocal.
+
+---
+
+# 17. MODULE 2 — TENIR UNE HAUTEUR
+
+L’application joue un son de référence.
+
+L’utilisateur doit le reproduire.
+
+Exemple :
+
+**Écoute.**
+
+Puis :
+
+**À toi.**
+
+Une cible horizontale apparaît.
+
+```text
+──────────── TARGET ────────────
+
+──────── TA VOIX ───────────────
+```
+
+L’objectif est de rester le plus stable possible.
+
+---
+
+# 18. MODULE 3 — REPRODUIRE UNE HAUTEUR
+
+L’application joue une hauteur.
+
+Silence.
+
+L’utilisateur doit reproduire le son.
+
+L’application mesure l’écart.
+
+Progression :
+
+Niveau 1 : grande tolérance.
+
+Niveau 2 : tolérance moyenne.
+
+Niveau 3 : précision importante.
+
+---
+
+# 19. MODULE 4 — MONTER ET DESCENDRE
+
+L’application affiche :
+
+**Monte**
+
+↗
+
+L’utilisateur doit faire monter progressivement sa voix.
+
+Puis :
+
+↘
+
+Puis :
+
+↗ ↘
+
+Puis :
+
+↗ → ↘
+
+Puis :
+
+↘ ↗ → ↘
+
+L’objectif est de développer le contrôle moteur de la voix.
+
+---
+
+# 20. MODULE 5 — GLISSÉS VOCAUX
+
+Exemple de cible :
+
+```text
+──────╮
+      ╰──────╮
+             ╰────
+```
+
+Ou :
+
+```text
+          ╭─────
+         ╱
+────────╯
+```
+
+La difficulté augmente progressivement.
+
+---
+
+# 21. MODULE 6 — INTERVALLES
+
+L’application joue deux hauteurs successives.
+
+Exemple :
+
+● → ●↑
+
+L’utilisateur doit reproduire le mouvement.
+
+Puis :
+
+●↑ → ●↓
+
+Puis :
+
+● → ●↑ → ●↓
+
+L’utilisateur n’a pas besoin de connaître le nom musical de l’intervalle.
+
+---
+
+# 22. MODULE 7 — PETITES SÉQUENCES
+
+L’application joue trois sons.
+
+Exemple :
+
+**bas → moyen → haut**
+
+L’utilisateur écoute.
+
+Puis reproduit.
+
+Progression :
+
+2 sons  
+3 sons  
+4 sons  
+5 sons  
+6 sons.
+
+La longueur doit s’adapter automatiquement à la réussite.
+
+---
+
+# 23. MODULE 8 — MÉMOIRE MÉLODIQUE
+
+L’utilisateur entend une séquence.
+
+La courbe n’est pas montrée.
+
+Il doit la mémoriser.
+
+Puis la reproduire.
+
+Ensuite seulement les deux courbes apparaissent :
+
+**Référence**
+
+et
+
+**Ta voix**
+
+Cela permet de travailler l’oreille intérieure.
+
+---
+
+# 24. MODULE 9 — IMITATION VISUELLE
+
+Une courbe apparaît sans son.
+
+Exemple :
+
+```text
+━━━↗━━━━↘━━↗━━
+```
+
+L’utilisateur doit comprendre visuellement la forme et la reproduire.
+
+C’est un exercice particulièrement important.
+
+Il crée progressivement un langage visuel associé au contrôle vocal.
+
+---
+
+# 25. MODULE 10 — IMITATION AUDIO
+
+L’application produit une petite phrase vocale neutre.
+
+L’utilisateur doit la reproduire.
+
+Les deux courbes sont ensuite superposées.
+
+Référence :
+
+████████
+
+Utilisateur :
+
+────────
+
+Les différences apparaissent clairement.
+
+---
+
+# 26. MODULE 11 — « CE QUE J’AI EN TÊTE »
+
+Fonction essentielle du projet.
+
+Bouton :
+
+### J’ai une mélodie en tête
+
+L’utilisateur appuie sur :
+
+**Enregistrer**
+
+Il vocalise ou fredonne ce qu’il imagine.
+
+L’application capture la courbe.
+
+Puis elle transforme cette courbe en exercice.
+
+Exemple :
+
+La mélodie dure 8 secondes.
+
+L’application la découpe en :
+
+A  
+B  
+C  
+D
+
+L’entraînement devient :
+
+A
+
+puis :
+
+B
+
+puis :
+
+A+B
+
+puis :
+
+C
+
+puis :
+
+D
+
+puis :
+
+C+D
+
+puis :
+
+A+B+C+D.
+
+Objectif :
+
+transformer une intuition mélodique en mouvement vocal maîtrisé.
+
+---
+
+# 27. MODE « BOUCLE »
+
+Pour tous les exercices, l’utilisateur doit pouvoir activer :
+
+**Répéter jusqu’à réussite**
+
+L’exercice recommence automatiquement.
+
+Exemple :
+
+Tentative 1 : 57 %
+
+Tentative 2 : 66 %
+
+Tentative 3 : 74 %
+
+Tentative 4 : 81 %
+
+L’application peut alors proposer :
+
+> Très bien. Passe au niveau suivant.
+
+---
+
+# 28. MODE RALENTI
+
+Une séquence peut être jouée :
+
+100 %
+
+75 %
+
+50 %
+
+Cela permet de comprendre les transitions difficiles.
+
+Important :
+
+le changement de vitesse ne doit pas modifier artificiellement les hauteurs.
+
+---
+
+# 29. MODULE « RÉCITANT »
+
+L’utilisateur peut importer localement un extrait audio.
+
+Formats :
+
+- MP3 ;
+- WAV ;
+- M4A si le navigateur le permet.
+
+L’application analyse l’extrait.
+
+Elle extrait principalement la courbe mélodique.
+
+Puis elle affiche :
+
+### Écouter
+
+### Observer la courbe
+
+### Imiter
+
+### Comparer
+
+---
+
+# 30. DÉCOUPAGE D’UN EXTRAIT
+
+L’utilisateur doit pouvoir sélectionner :
+
+00:12 → 00:18
+
+dans un enregistrement.
+
+Seules ces quelques secondes deviennent l’exercice.
+
+Le but est de travailler des passages courts.
+
+---
+
+# 31. COMPARAISON RELATIVE
+
+Deux voix différentes n’ont pas forcément la même hauteur naturelle.
+
+L’application ne doit donc pas pénaliser systématiquement l’utilisateur parce qu’il récite plus grave que le récitant de référence.
+
+Elle doit comparer :
+
+- direction ;
+- intervalles ;
+- proportions ;
+- forme mélodique ;
+- timing.
+
+Le système doit pouvoir transposer mentalement la référence vers la tessiture naturelle de l’utilisateur.
+
+---
+
+# 32. MODULE CORAN
+
+Ce module n’apparaît qu’après les exercices vocaux fondamentaux.
+
+Il permet de travailler de courtes phrases ou āyāt.
+
+Priorité absolue :
+
+**Tajwīd > mélodie**
+
+La mélodie ne doit jamais provoquer :
+
+- modification incorrecte d’une voyelle ;
+- prolongation artificielle ;
+- raccourcissement incorrect ;
+- modification d’un madd ;
+- modification de la ghunnah ;
+- déformation d’une lettre ;
+- modification du makhraj ;
+- accélération excessive ;
+- ralentissement artificiel.
+
+---
+
+# 33. GARDE-FOU RELIGIEUX
+
+Une règle doit être inscrite dans l’application :
+
+> L’embellissement de la voix accompagne la récitation.  
+> Il ne doit pas transformer les règles de récitation.
+
+Le produit ne doit pas être présenté comme une application d’apprentissage musical du Coran.
+
+La V1 ne comporte pas de cours formel de :
+
+- Bayātī ;
+- Nahāwand ;
+- Hijāz ;
+- Rast ;
+- Sikāh ;
+- autres maqāmāt.
+
+La priorité est donnée à :
+
+- maîtrise vocale ;
+- embellissement naturel ;
+- flexibilité ;
+- écoute ;
+- imitation ;
+- expression.
+
+---
+
+# 34. MODE ENREGISTREMENT LIBRE
+
+Bouton :
+
+### Récitation libre
+
+L’utilisateur récite ce qu’il souhaite.
+
+L’application affiche uniquement :
+
+- courbe vocale ;
+- amplitude ;
+- stabilité ;
+- durée ;
+- respiration approximative ;
+- mouvements grave/aigu.
+
+Après l’enregistrement, possibilité de réécouter.
+
+---
+
+# 35. COMPARAISON AVEC UNE ANCIENNE RÉCITATION
+
+L’utilisateur peut comparer :
+
+**Aujourd’hui**
+
+avec :
+
+**il y a 7 jours**
+
+ou :
+
+**il y a 30 jours**
+
+L’objectif est d’identifier une progression réelle.
+
+---
+
+# 36. FATIGUE VOCALE
+
+L’application doit disposer d’un mécanisme simple de protection.
+
+Avant la séance :
+
+### Comment est ta voix ?
+
+1 — fatiguée  
+2 — moyenne  
+3 — normale  
+4 — très bonne
+
+Si l’utilisateur sélectionne 1 :
+
+> Séance légère recommandée.
+
+L’application diminue automatiquement :
+
+- durée ;
+- amplitude ;
+- difficulté.
+
+---
+
+# 37. SIGNAL D’ARRÊT
+
+Pendant une séance, bouton toujours visible :
+
+**Je sens une gêne**
+
+L’application arrête la séance.
+
+Message :
+
+> Ne force pas la voix. Reprends plus tard lorsque la voix est reposée.
+
+Aucune récompense ne doit être attribuée pour avoir atteint des extrêmes vocaux.
+
+---
+
+# 38. DURÉE RECOMMANDÉE
+
+Une séance standard :
+
+### 10 à 15 minutes
+
+Exemple :
+
+3 min — échauffement  
+3 min — stabilité  
+3 min — montées/descentes  
+3 min — imitation  
+3 min — application
+
+Les séances longues ne sont pas l’objectif principal.
+
+La régularité est prioritaire.
+
+---
+
+# 39. PROGRAMME ADAPTATIF
+
+L’application analyse les résultats précédents.
+
+Exemple :
+
+Montée : excellente.
+
+Descente : moyenne.
+
+Stabilité : excellente.
+
+Mémoire mélodique : faible.
+
+La séance suivante doit donner davantage d’exercices de mémoire mélodique.
+
+---
+
+# 40. PROGRESSION
+
+L’application comporte différents niveaux techniques.
+
+## Niveau 1 — Contrôle de base
+
+- tenir une hauteur ;
+- monter ;
+- descendre ;
+- respirer correctement ;
+- reconnaître grave/aigu.
+
+## Niveau 2 — Précision
+
+- reproduire une hauteur ;
+- reproduire deux hauteurs ;
+- maintenir la stabilité.
+
+## Niveau 3 — Souplesse
+
+- glissés ;
+- variations ;
+- changements contrôlés.
+
+## Niveau 4 — Mémoire
+
+- séquences courtes ;
+- imitation différée.
+
+## Niveau 5 — Expression
+
+- motifs plus complexes ;
+- imitation d’une courbe.
+
+## Niveau 6 — Application
+
+- récitation ;
+- imitation de récitant ;
+- création personnelle.
+
+---
+
+# 41. TABLEAU DE BORD
+
+Écran :
+
+### Ma progression
+
+Indicateurs :
+
+- jours d’entraînement ;
+- minutes totales ;
+- précision moyenne ;
+- stabilité ;
+- amplitude confortable ;
+- mémoire mélodique ;
+- difficulté moyenne atteinte.
+
+Graphiques simples :
+
+7 jours  
+30 jours  
+Tout
+
+---
+
+# 42. PAS DE GAMIFICATION EXCESSIVE
+
+Pas de :
+
+- compétition ;
+- classement ;
+- XP inutile ;
+- badges par dizaines ;
+- animations de casino ;
+- streak culpabilisant.
+
+La progression doit rester sobre.
+
+---
+
+# 43. HISTORIQUE
+
+L’historique doit afficher :
+
+30 septembre
+
+12 minutes
+
+Précision : 81 %
+
+Stabilité : 88 %
+
+Puis :
+
+29 septembre
+
+10 minutes
+
+Précision : 76 %
+
+Stabilité : 85 %
+
+Cliquer sur une séance permet de revoir les exercices.
+
+---
+
+# 44. FAVORIS
+
+Un exercice peut être marqué :
+
+★ Favori
+
+Exemples :
+
+« Descente progressive 4 »
+
+« Mélodie personnelle 02 »
+
+« Passage récitant 00:34 »
+
+---
+
+# 45. BIBLIOTHÈQUE PERSONNELLE
+
+Catégories :
+
+### Mes exercices
+
+### Mes mélodies
+
+### Mes récitations
+
+### Extraits de récitateurs
+
+### Favoris
+
+Toutes les données sont personnelles.
+
+---
+
+# 46. ENREGISTREMENTS AUDIO
+
+Par défaut, ne pas enregistrer tous les exercices.
+
+Cela éviterait de remplir rapidement le stockage.
+
+L’utilisateur peut choisir :
+
+**Conserver cet enregistrement**
+
+Sinon seule l’analyse numérique est conservée.
+
+---
+
+# 47. RÉGLAGES
+
+Écran paramètres :
+
+### Microphone
+
+Choisir le microphone.
+
+### Sensibilité
+
+Automatique  
+Manuelle
+
+### Feedback sonore
+
+Activé / désactivé.
+
+### Affichage fréquence
+
+Masquée / visible.
+
+### Affichage technique
+
+Simple / expert.
+
+### Durée quotidienne
+
+5 / 10 / 15 / 20 minutes.
+
+### Sauvegarde
+
+Exporter.
+
+Importer.
+
+Effacer toutes les données.
+
+---
+
+# 48. MODE SIMPLE / MODE EXPERT
+
+## Mode simple
+
+Affiche :
+
+↑ Monte
+
+↓ Descends
+
+✓ Correct
+
+## Mode expert
+
+Affiche également :
+
+- Hz ;
+- cents ;
+- intervalle relatif ;
+- variance ;
+- stabilité ;
+- durée ;
+- statistiques détaillées.
+
+Par défaut :
+
+**mode simple.**
+
+---
+
+# 49. DESIGN
+
+Le design doit être :
+
+- sombre ou semi-sombre ;
+- élégant ;
+- reposant ;
+- moderne ;
+- minimaliste ;
+- pas enfantin ;
+- sans surcharge religieuse décorative.
+
+Palette possible :
+
+- bleu nuit ;
+- turquoise doux ;
+- ivoire ;
+- touches dorées très discrètes.
+
+---
+
+# 50. VISUALISATION VOCALE
+
+La courbe vocale doit être l’élément graphique central.
+
+Elle doit être :
+
+- fluide ;
+- lisible ;
+- animée en temps réel ;
+- suffisamment grande sur téléphone.
+
+Une animation excessive est à éviter.
+
+---
+
+# 51. ARCHITECTURE TECHNIQUE RECOMMANDÉE
+
+Frontend :
+
+**Next.js + React + TypeScript**
+
+Interface :
+
+**Tailwind CSS**
+
+Composants :
+
+bibliothèque légère de composants UI.
+
+Audio :
+
+**Web Audio API**
+
+Microphone :
+
+**MediaDevices / getUserMedia**
+
+Analyse :
+
+algorithme de pitch detection exécuté dans le navigateur.
+
+Visualisation :
+
+Canvas ou SVG.
+
+Données :
+
+IndexedDB.
+
+PWA :
+
+Service Worker + manifest.
+
+---
+
+# 52. AUCUN BACKEND OBLIGATOIRE
+
+La première version doit fonctionner sans serveur applicatif.
+
+Architecture :
+
+```text
+Navigateur
+   │
+   ├── Microphone
+   │
+   ├── Web Audio API
+   │
+   ├── Analyse vocale
+   │
+   ├── Exercices
+   │
+   └── IndexedDB
+```
+
+Le serveur ne sert qu’à distribuer l’application web.
+
+---
+
+# 53. CONFIDENTIALITÉ
+
+Principe :
+
+> La voix reste sur l’appareil.
+
+Par défaut :
+
+- aucun upload ;
+- aucun cloud ;
+- aucune transmission vers un serveur ;
+- aucun compte.
+
+Les fichiers importés sont analysés localement.
+
+---
+
+# 54. MODE HORS CONNEXION
+
+Une fois installée, la majorité des exercices doivent pouvoir fonctionner sans Internet.
+
+Il faut notamment pouvoir utiliser hors connexion :
+
+- échauffement ;
+- sons ;
+- courbes ;
+- exercices ;
+- historique ;
+- récitations enregistrées ;
+- bibliothèque personnelle.
+
+---
+
+# 55. GÉNÉRATEUR D’EXERCICES
+
+Le système doit pouvoir générer automatiquement différentes courbes.
+
+Paramètres :
+
+- durée ;
+- hauteur de départ ;
+- amplitude ;
+- nombre de changements ;
+- vitesse ;
+- complexité.
+
+Exemple :
+
+```text
+Pattern :
+stable
+montée
+stable
+descente
+stable
+```
+
+Le même pattern peut être utilisé dans différentes zones de la voix.
+
+---
+
+# 56. ADAPTATION À LA TESSITURE
+
+Tous les exercices doivent être générés relativement à la zone confortable détectée.
+
+Exemple :
+
+au lieu de demander :
+
+220 Hz
+
+le système demande :
+
+**+20 % par rapport au centre vocal confortable.**
+
+L’exercice s’adapte automatiquement à la voix de l’utilisateur.
+
+---
+
+# 57. ALGORITHME DE DIFFICULTÉ
+
+La difficulté dépend de :
+
+- amplitude ;
+- vitesse ;
+- longueur ;
+- nombre de changements ;
+- précision nécessaire ;
+- mémoire nécessaire.
+
+Le programme augmente la difficulté progressivement.
+
+---
+
+# 58. RÈGLE DE PROGRESSION
+
+Exemple :
+
+score > 85 % trois fois :
+
+→ augmenter légèrement la difficulté.
+
+score entre 65 et 85 % :
+
+→ conserver le niveau.
+
+score < 65 % :
+
+→ simplifier légèrement.
+
+---
+
+# 59. MVP — VERSION 0.1
+
+La toute première version ne doit développer que le cœur technologique.
+
+Fonctions :
+
+1. autorisation microphone ;
+2. détection de la voix ;
+3. mesure de fréquence ;
+4. affichage d’une courbe en temps réel ;
+5. son cible ;
+6. exercice « tenir une hauteur » ;
+7. exercice montée ;
+8. exercice descente ;
+9. exercice montée + descente ;
+10. score de précision.
+
+Si ces dix éléments fonctionnent parfaitement, le projet est techniquement validé.
+
+---
+
+# 60. VERSION 0.2
+
+Ajouter :
+
+- diagnostic vocal ;
+- tessiture confortable ;
+- exercices adaptatifs ;
+- historique ;
+- progression ;
+- IndexedDB.
+
+---
+
+# 61. VERSION 0.3
+
+Ajouter :
+
+- séquences mélodiques ;
+- mémoire ;
+- imitation ;
+- mode boucle ;
+- vitesse ralentie.
+
+---
+
+# 62. VERSION 0.4
+
+Ajouter :
+
+### « J’ai une mélodie en tête »
+
+Enregistrement.
+
+Analyse.
+
+Découpage.
+
+Transformation en exercice.
+
+---
+
+# 63. VERSION 0.5
+
+Ajouter :
+
+- import audio ;
+- analyse d’un récitant ;
+- sélection d’un passage ;
+- extraction de courbe ;
+- imitation ;
+- comparaison relative.
+
+---
+
+# 64. VERSION 1.0
+
+Ajouter :
+
+- mode récitation coranique ;
+- bibliothèque personnelle ;
+- programme quotidien adaptatif ;
+- suivi complet ;
+- PWA ;
+- sauvegarde/import/export.
+
+---
+
+# 65. CRITÈRES DE RÉUSSITE DU MVP
+
+Le MVP sera considéré comme réussi lorsque :
+
+1. la voix est détectée rapidement ;
+2. la courbe apparaît avec très peu de latence ;
+3. l’utilisateur comprend immédiatement s’il monte ou descend ;
+4. la cible est facilement compréhensible ;
+5. la détection fonctionne sur téléphone ;
+6. les exercices s’adaptent à la zone vocale ;
+7. l’utilisateur peut réellement améliorer sa précision après plusieurs répétitions.
+
+---
+
+# 66. TEST FONDAMENTAL
+
+Un test utilisateur simple permettra de savoir si le concept fonctionne.
+
+Jour 1 :
+
+faire reproduire une séquence de trois mouvements.
+
+Mesurer le résultat.
+
+Après plusieurs jours d’exercice :
+
+faire reproduire exactement la même séquence.
+
+Si la différence entre cible et voix diminue significativement :
+
+**le produit accomplit sa mission.**
+
+---
+
+# 67. INDICATEUR PRINCIPAL DU PRODUIT
+
+La métrique la plus importante ne sera pas :
+
+« nombre de séances ».
+
+Mais :
+
+> **écart moyen entre la courbe imaginée ou entendue et la courbe réellement produite.**
+
+Si cet écart diminue progressivement, l’entraînement fonctionne.
+
+---
+
+# 68. PRINCIPE FINAL
+
+Mīzān al-Ṣawt doit être conçu non comme un professeur de chant mais comme :
+
+> **un miroir de la voix.**
+
+L’utilisateur entend.
+
+Il reproduit.
+
+Il voit ce qu’il a réellement produit.
+
+Il comprend son erreur.
+
+Il recommence.
+
+Petit à petit, l’oreille, le cerveau et la voix apprennent à travailler ensemble.
+
+L’objectif final n’est pas de produire une récitation artificielle.
+
+L’objectif est d’obtenir une voix plus libre, plus maîtrisée, plus souple et plus expressive, au service d’une récitation correcte du Coran.
+
+Il y a aussi un choix technique que je trouve particulièrement important ici : **je ne mettrais aucune IA dans le MVP**. Pour détecter une hauteur, comparer deux courbes et construire les premiers exercices, des algorithmes audio classiques donneront un résultat beaucoup plus rapide, prévisible et utilisable hors ligne. L’IA pourra éventuellement venir plus tard pour analyser une récitation et formuler un retour pédagogique en langage naturel.
+
+**Étape suivante :** il faut maintenant transformer ce cahier des charges en **plan de développement BUILD par BUILD**, en commençant par un BUILD 1 extrêmement précis : architecture du projet, pages, composants, moteur micro, algorithme de détection de hauteur et critères de validation. C’est ce document que tu pourras ensuite donner directement à Antigravity, Codex ou un autre agent de développement.
